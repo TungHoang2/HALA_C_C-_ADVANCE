@@ -39,7 +39,7 @@ Compiler 32-bits thì con trỏ có kích thước 4 bytes.
 Compiler 8-bits thì con trỏ có kích thước 1 bytes.
 
 ### Ví dụ về pointer:
-```
+``` C
 int swap_1(int a, int b){   
     int temp = a;
     a = b;
