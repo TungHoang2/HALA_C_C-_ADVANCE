@@ -192,7 +192,7 @@ int main(){
     int *const const_ptr = &a;
 
     printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 5
-    *const_ptr = 4;                             // Sai: không thể thay đổi qua pointer
+    *const_ptr = 4;                             // Có thể thay đổi qua pointer
     printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 4
 
     //const_ptr = &b;                           // Sai: không thể trỏ đến địa chỉ khác
