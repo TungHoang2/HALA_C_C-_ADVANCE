@@ -525,7 +525,7 @@ Ngăn chặn việc sửa đổi dữ liệu hoặc thay đổi dữ liệu 1 c�
 
 **Khai báo:** <data_type> const *<tên_biến>; hoặc const <data_type> *<tên biến>;
 
-               int const *ptr_const;  hoặc const int *ptr_const;
+            int const *ptr_const;  hoặc const int *ptr_const;
 
 **Ví dụ:**
 ``` C
@@ -549,12 +549,12 @@ int main(){
 * Tại địa chỉ mà nó trỏ đến chỉ có thể đọc giá trị mà không thể thay đổi giá trị thông qua pointer
 * Có thể trỏ đến địa chỉ khác (khác so với Constant Pointer – hằng con trỏ)
 
-### 1.4.4. Constant Pointer
-Định nghĩa: Là 1 con trỏ mà khi đã được khởi tạo thì không thể thay đổi địa chỉ khác (trỏ đến 1 địa chỉ duy nhất)
-Khai báo: <data_type> *const <tên_biến> (int *const const_ptr)
+### Constant Pointer
+**Định nghĩa:** Là 1 con trỏ mà khi đã được khởi tạo thì không thể thay đổi địa chỉ khác (trỏ đến 1 địa chỉ duy nhất) và không thể thay đổi giá trị thông qua con trỏ
+**Khai báo:** <data_type> *const <tên_biến> (int *const const_ptr)
 
 Ví dụ: 
-```
+``` C
 #include <stdio.h>
 
 int main(){
@@ -563,8 +563,8 @@ int main(){
     int *const const_ptr = &a;
 
     printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 5
-    *const_ptr = 4;                             // Có thể thay đổi qua pointer
-    printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 4
+    *const_ptr = 4;                             // Sai: Không thể thay đổi qua pointer
+    printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 5
 
     //const_ptr = &b;                           // Sai: không thể trỏ đến địa chỉ khác
 
