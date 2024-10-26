@@ -550,10 +550,17 @@ int main(){
 * Có thể trỏ đến địa chỉ khác (khác so với Constant Pointer – hằng con trỏ)
 
 ### Constant Pointer
-**Định nghĩa:** Là 1 con trỏ mà khi đã được khởi tạo thì không thể thay đổi địa chỉ khác (trỏ đến 1 địa chỉ duy nhất) và không thể thay đổi giá trị thông qua con trỏ
+**Định nghĩa:** Là 1 con trỏ mà khi đã được khởi tạo thì không thể thay đổi địa chỉ khác (trỏ đến 1 địa chỉ duy nhất) 
+
 **Khai báo:** <data_type> *const <tên_biến> (int *const const_ptr)
 
-Ví dụ: 
+**Tác dụng:**
+* Bảo vệ địa chỉ cố định: Giúp đảm bảo rằng con trỏ luôn trỏ đến một biến nhất định trong suốt thời gian thực thi chương trình.
+* Tránh lỗi vô tình thay đổi địa chỉ trong các chương trình phức tạp.
+* Dùng trong lập trình hệ thống hoặc nhúng: Khi con trỏ cần trỏ đến một vùng bộ nhớ cố định, ví dụ: dùng con trỏ để làm việc với vùng nhớ GPIOA hoặc GPIOB, nhưng vẫn cần được phép sửa đổi dữ liệu tại đó.
+* Tăng độ an toàn và dễ bảo trì: Các biến được truy cập bởi const pointer sẽ không bị trỏ nhầm tới địa chỉ khác, giúp dễ phát hiện và sửa lỗi.
+  
+**Ví dụ:**
 ``` C
 #include <stdio.h>
 
@@ -563,15 +570,15 @@ int main(){
     int *const const_ptr = &a;
 
     printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 5
-    *const_ptr = 4;                             // Sai: Không thể thay đổi qua pointer
+    *const_ptr = 4;                             // Có thể thay đổi qua pointer
     printf("Gia tri cua a: %d\n",*const_ptr);   // Output: Gia tri cua a: 5
 
     //const_ptr = &b;                           // Sai: không thể trỏ đến địa chỉ khác
 
 }
 ```
-### 1.4.5. NULL Pointer
-Null Pointer là một con trỏ không trỏ đến bất kỳ đối tượng hoặc vùng nhớ cụ thể nào và có địa chỉ mặc định là 0x00
+### NULL Pointer
+**Định nghĩa:** Null Pointer là một con trỏ không trỏ đến bất kỳ đối tượng hoặc vùng nhớ cụ thể nào và có địa chỉ mặc định là 0x00
 Khi sử dụng xong phải gán là giá trị NULL tránh con trỏ sẽ trỏ vào các vị trí không mong muốn
 
 Khi nào sử dụng con trỏ NULL?
@@ -580,10 +587,16 @@ Khi khởi tạo con trỏ mà không gán giá trị thì nó sẽ trỏ đến
 
 Đối với lập trình vi xử lý, khi khai báo con trỏ mà chưa sử dụng thì phải gán giá trị NULL để tránh bị lỗi.
 
-### 1.4.6. Pointer to pointer
-Con trỏ trỏ đến con trỏ (Pointers to pointers) là một con trỏ chứa địa chỉ của một con trỏ khác
-Ví dụ: 
-```
+###Pointer to pointer
+**Định nghĩa:** Con trỏ trỏ đến con trỏ (Pointers to pointers) là một con trỏ chứa địa chỉ của một con trỏ khác
+
+**Tác dụng:**
+* Khi muốn thay đổi địa chỉ mà con trỏ đang trỏ tới. (**Giải thích:** Vì khi truyền một con trỏ vào hàm, hàm đó chỉ nhận được một bản sao của địa chỉ mà con trỏ đang trỏ tới. Nếu muốn hàm thay đổi địa chỉ mà con trỏ đang trỏ tới, cần truyền một pointer to pointer.)
+* Sử dụng trong các hàm cấp phát bộ nhớ động hoặc truyền con trỏ qua hàm.
+* Quản lý mảng con trỏ (**Ví dụ:** Quản lý mảng các chuỗi.)
+
+**Ví dụ:**
+``` C
 #include <stdio.h>
 
 int main(){
@@ -594,4 +607,4 @@ int main(){
     printf("%d",*(*ptp));
 }
 ```
-Giải thích: ptp có địa chỉ là 0x01, ptr có địa chỉ là 0xc1, giá trị bên trong địa chỉ 0xc1 = 10. *ptp sẽ là địa chỉ của ptr  vậy nên **ptp = *&ptr = 10
+**Giải thích:** ptp có địa chỉ là 0x01, ptr có địa chỉ là 0xc1, giá trị bên trong địa chỉ 0xc1 = 10. *ptp sẽ là địa chỉ của ptr  vậy nên **ptp = *&ptr = 10
