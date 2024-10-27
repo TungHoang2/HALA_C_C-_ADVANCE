@@ -581,13 +581,13 @@ int main(){
 **Định nghĩa:** Null Pointer là một con trỏ không trỏ đến bất kỳ đối tượng hoặc vùng nhớ cụ thể nào và có địa chỉ mặc định là 0x00
 Khi sử dụng xong phải gán là giá trị NULL tránh con trỏ sẽ trỏ vào các vị trí không mong muốn
 
-Khi nào sử dụng con trỏ NULL?
+**Khi nào sử dụng con trỏ NULL?**
 
-Khi khởi tạo con trỏ mà không gán giá trị thì nó sẽ trỏ đến 1 địa chỉ ngẫu nhiên (địa chỉ rác) và khi sử dụng vi xử lý có trường hợp sẽ trỏ đến vị trí mình đang sử dụng, thay đổi giá trị và gây ra lỗi.
+* Khi khởi tạo con trỏ mà không gán giá trị thì nó sẽ trỏ đến 1 địa chỉ ngẫu nhiên (địa chỉ rác) và khi sử dụng vi xử lý có trường hợp sẽ trỏ đến vị trí mình đang sử dụng, thay đổi giá trị và gây ra lỗi.
+* Đối với lập trình vi xử lý, khi khai báo con trỏ mà chưa sử dụng thì phải gán giá trị NULL để tránh bị lỗi.
 
-Đối với lập trình vi xử lý, khi khai báo con trỏ mà chưa sử dụng thì phải gán giá trị NULL để tránh bị lỗi.
+### Pointer to pointer
 
-###Pointer to pointer
 **Định nghĩa:** Con trỏ trỏ đến con trỏ (Pointers to pointers) là một con trỏ chứa địa chỉ của một con trỏ khác
 
 **Tác dụng:**
@@ -608,3 +608,84 @@ int main(){
 }
 ```
 **Giải thích:** ptp có địa chỉ là 0x01, ptr có địa chỉ là 0xc1, giá trị bên trong địa chỉ 0xc1 = 10. *ptp sẽ là địa chỉ của ptr  vậy nên **ptp = *&ptr = 10
+
+# Extern - Static - Register - Volatile
+
+## Extern
+**Khái niệm:**
+Được sử dụng để khai báo một biến hoặc hàm được định nghĩa ở nơi khác (thường là ở một file khác) nhằm chia sẻ biến/hàm đó giữa nhiều file trong một chương trình lớn.. Giúp chương trình hiểu được biến hoặc hàm đã được định nghĩa và sẽ được sử dụng từ 1 vị trí khác, quản lý sự liên kết giữa các phần khác nhau của chương trình hoặc giữa các file nguồn.
+
+
+**Ứng dụng:**
+
+* Chia sẻ biến toàn cục giữa nhiều file: Trong các chương trình lớn, thường có nhiều file mã nguồn. Dùng extern để tránh khai báo nhiều lần cho cùng một biến toàn cục.
+* Cải thiện quản lý mã nguồn: Các biến toàn cục chỉ cần được định nghĩa một lần và có thể truy cập từ nhiều file khác nhau mà không phải khởi tạo lại.
+* Sử dụng trong thư viện hoặc các dự án lớn: extern giúp các dự án lớn tách riêng logic thành nhiều file và dễ dàng quản lý hơn.
+
+
+**Lưu ý:**
+* Chỉ sử dụng extern cho biến đã được định nghĩa: Nếu biến không được định nghĩa ở bất kỳ file nào, sẽ gặp lỗi trong quá trình liên kết (linker error).
+* Chỉ sử dụng khi biến ở toàn cục (vì nếu khai báo cục bộ thì nó chỉ có phạm vi trong 1 hàm nên không có ý nghĩa)
+* Vì có phạm vi toàn cục nên lưu ý tránh xung đột tên biến với các file khác.
+* Chỉ được khai báo không được khởi tạo giá trị.
+* Phải sử dụng liên kết file và dùng để thiết kế thư viện.
+
+**Câu hỏi:**
+
+**Khi nào dùng extern cho biến?**
+Khi bạn muốn sử dụng một biến toàn cục (global) đã được định nghĩa ở một file khác mà không cần phải khai báo và khởi tạo lại.
+
+**Tại sao không sử dụng include mà xài extern?**
+Không sử dụng include bởi vì chỉ cần xài 1 số biến, hàm trong file đó chứ không cần tất cả nên xài include sẽ tốn bộ nhớ, xử lý lâu hơn, tác vụ chậm hơn.
+
+
+## Static 
+### Static local variable
+
+**Ví dụ:**
+``` C
+#include <stdio.h>
+
+void count(){
+    static int a =10;  // giữ giá trị qua các lần gọi hàm
+    a++;
+    printf("a = %d\n", a);
+}
+int main(){
+    count(); // a = 11
+    count(); // a = 12
+    count(); // a =13
+}
+```
+**Giải thích:**
+* Static cục bộ sẽ nằm ở phân vùng ds hoặc bss chứ không phải trong stack nên là biến sẽ tồn tại đến khi kết thúc chương trình thực thi chứ không phải kết thúc khối lệnh mà nó được khai báo.
+* Nếu muốn thay đổi giá trị thì dùng con trỏ (trỏ đến địa chỉ của biến đó và thay đổi) hoặc thay đổi trực tiếp trong hàm.
+
+**Ứng dụng:**
+* Lưu trữ trạng thái giữa các lần gọi hàm: Sử dụng biến static để theo dõi trạng thái trạng thái giữa các lần gọi hàm mà không cần sử dụng biến toàn cục.
+* Cải thiện hiệu suất: Biến static cục bộ không bị khởi tạo lại mỗi khi hàm được gọi, điều này giúp cải thiện hiệu suất trong một số trường hợp.
+
+### Static global variable:
+Khi sử dụng với global variables (biến toàn cục – khai báo ngoài hàm), nó sẽ hạn chế phạm vi của biến đó chỉ trong file nguồn hiện tại không cho cái file khác truy cập vào. Điều này giúp tránh xung đột tên biến giữa các file và tăng tính bảo mật.
+
+## Register
+
+* Chỉ sử dụng cho biến cục bộ, không sử dụng cho biến toàn cục 
+* Bình thường sẽ chạy tuần tự 4 bước từ khai báo ở RAM sau đó đẩy sang lưu vào Register và đẩy sang ALU để tính toán số học và cuối cùng là trả về  Register sau đó về RAM
+* Khi khai báo register thì sẽ rút ngắn quá trình chạy chỉ còn 2 bước giúp chương trình chạy nhanh hơn, tăng tốc độ truy cập
+
+**Câu hỏi:**
+
+**Biến được khai báo register khai báo toàn cục hay cục bộ?**
+Biến register chỉ khai báo được cục bộ thôi và khai báo toàn cục sẽ bị lỗi (với 1 vài compiler) vì mục đích của register là tối ưu hóa các biến có tuổi thọ ngắn để tăng hiệu suất tính toán số học trong các hàm con, bên cạnh đó thì lượng thanh ghi trong CPU là hữu hạn và sử dụng ở toàn cục thì có thể bị ghi đè dữ liệu dẫn đến tính toán sai.
+
+**Khi nào nên sử dụng register?**
+* Biến được sử dụng rất thường xuyên: Đặc biệt là trong các vòng lặp, phép tính số học.
+* Biến có kích thước nhỏ: Các biến kiểu nguyên (int, short) thường phù hợp hơn.
+* Trình biên dịch hỗ trợ: Không phải tất cả các trình biên dịch đều hỗ trợ từ khóa register hoặc có thể bỏ qua gợi ý của bạn.
+
+
+## Volatile
+Từ khóa volatile được sử dụng để báo hiệu cho trình biên dịch rằng một biến có thể thay đổi ngẫu nhiên, ngoài sự kiểm soát của chương trình (nút nhấn,…). Việc này ngăn chặn trình biên dịch tối ưu hóa hoặc xóa bỏ các thao tác trên biến đó, giữ cho các thao tác trên biến được thực hiện như đã được định nghĩa.
+
+
