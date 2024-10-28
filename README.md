@@ -688,4 +688,52 @@ Biến register chỉ khai báo được cục bộ thôi và khai báo toàn c�
 ## Volatile
 Từ khóa volatile được sử dụng để báo hiệu cho trình biên dịch rằng một biến có thể thay đổi ngẫu nhiên, ngoài sự kiểm soát của chương trình (nút nhấn,…). Việc này ngăn chặn trình biên dịch tối ưu hóa hoặc xóa bỏ các thao tác trên biến đó, giữ cho các thao tác trên biến được thực hiện như đã được định nghĩa.
 
+# Bitmask
+
+Bitmask là một kỹ thuật sử dụng các bit để lưu trữ và thao tác với các cờ (flags) hoặc trạng thái. Có thể sử dụng bitmask để đặt, xóa và kiểm tra trạng thái của các bit cụ thể trong một từ (word).
+
+**Ứng dụng:**
+Bitmask thường được sử dụng để tối ưu bộ nhớ, thực hiện các phép toán logic trên 1 cụm bit, và quản lý các trạng thái, quyền truy cập, hoặc các thuộc tính khác nhau của 1 đối tượng
+
+## Các thao tác thường dùng:
+
+### AND (&) – Kiểm tra trạng thái bit
+
+**Mô tả:** So sánh từng bit của hai số, nếu cả hai bit đều là 1 thì kết quả là 1, ngược lại là 0.
+
+**Ứng dụng:** Thường dùng để kiểm tra xem một bit cụ thể có được bật hay không.
+
+**Ví dụ:**
+``` C
+int checkBit(int num, int pos) {
+    return (num & (1 << pos)) != 0;
+}
+```
+
+### OR (|) – Bật (Set) bit
+
+**Mô tả:** So sánh từng bit, nếu ít nhất một trong hai bit là 1 thì kết quả là 1, ngược lại là 0.
+
+**Ứng dụng:** Thường dùng để bật (set) một bit cụ thể.
+
+**Ví dụ:**
+``` C
+int setBit(int num, int pos) {
+    return num | (1 << pos);
+}
+```
+
+### XOR (^) – Đảo (Toggle) bit
+
+**Mô tả:** So sánh từng bit, nếu hai bit khác nhau thì kết quả là 1, nếu giống nhau thì là 0.
+
+**Ứng dụng:** Thường dùng để đảo ngược giá trị của một bit (1 thành 0 hoặc 0 thành 1).
+
+**Ví dụ:**
+``` C
+int toggleBit(int num, int pos) {
+    return num ^ (1 << pos);
+}
+```
+
 
