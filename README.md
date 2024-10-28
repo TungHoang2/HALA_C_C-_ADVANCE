@@ -709,6 +709,10 @@ int checkBit(int num, int pos) {
     return (num & (1 << pos)) != 0;
 }
 ```
+**Ví dụ:** Kiểm tra bit thứ 1 của số 5 (00000101):
+``` C
+00000101 & 00000010 = 00000000 (Kết quả: 0)
+```
 
 ### OR (|) – Bật (Set) bit
 
@@ -720,6 +724,24 @@ int checkBit(int num, int pos) {
 ``` C
 int setBit(int num, int pos) {
     return num | (1 << pos);
+}
+```
+
+**Ví dụ:** Bật bit thứ 1 của số 5 (00000101):
+``` C
+00000101 | 00000010 = 00000111 (Kết quả: 7)
+```
+
+### AND và NOT - Tắt (Clear) bit
+
+**Mô tả:** Để tắt một bit, dùng AND với NOT của bit cần tắt.
+
+**Ứng dụng:** Xóa bỏ trạng thái của một bit cụ thể.
+
+**Ví dụ:**
+``` C
+void disableFeature(uint8_t *features, uint8_t feature) {
+    *features &= ~feature;
 }
 ```
 
@@ -736,4 +758,77 @@ int toggleBit(int num, int pos) {
 }
 ```
 
+**Ví dụ:** Đảo bit thứ 2 của số 5 (00000101)
+``` C
+00000101 ^ 00000100 = 00000001 (Kết quả: 1)
+```
 
+### NOT (~) – Đảo ngược tất cả bit
+
+**Mô tả:** Chuyển tất cả bit 0 thành 1 và ngược lại.
+
+**Ứng dụng:** Thường dùng để đảo ngược trạng thái của một số nhị phân hoàn toàn.
+
+**Ví dụ:**
+``` C
+#include <stdio.h>
+
+int main() {
+    int num = 5;  // 00000101
+    printf("NOT ~%d = %d\n", num, ~num);  // Đảo bit
+    return 0;
+}
+```
+
+### Dịch trái (<<) – Nhân với 2
+
+**Mô tả:** Dịch các bit sang trái, các bit trống bên phải được lấp bằng 0.
+
+**Ứng dụng:** Dùng để nhân số với 2 mũ n lần dịch.
+
+**Ví dụ:** Dịch trái số 3 (00000011) 1 lần
+
+``` C
+00000011 << 1 = 00000110 (Kết quả: 6)
+```
+
+### Dịch phải (>>) – Chia cho 2
+
+**Mô tả:** Dịch các bit sang phải, các bit trống bên trái có thể được lấp bằng 0 hoặc 1 tùy vào kiểu số.
+
+**Ứng dụng:** Dùng để chia số cho 2 mũ n lần dịch.
+
+**Ví dụ:** Dịch phải số 6 (00000110) 1 lần
+
+``` C
+00000110 >> 1 = 00000011 (Kết quả: 3)
+```
+
+**Ví dụ tổng hợp:**
+``` C
+#include <stdio.h>
+
+#define READ    (1 << 0)  // 0001
+#define WRITE   (1 << 1)  // 0010
+#define EXECUTE (1 << 2)  // 0100
+
+void updatePermissions(int *permissions, int action, int add) {
+    if (add) {
+        *permissions |= action;  // Bật quyền
+    } else {
+        *permissions &= ~action;  // Tắt quyền
+    }
+}
+
+int main() {
+    int permissions = READ;  // Khởi tạo với quyền đọc (0001)
+    
+    updatePermissions(&permissions, WRITE, 1);  // Thêm quyền ghi
+    printf("Permissions: %d\n", permissions);  // Kết quả: 3 (0011)
+    
+    updatePermissions(&permissions, READ, 0);  // Xóa quyền đọc
+    printf("Permissions: %d\n", permissions);  // Kết quả: 2 (0010)
+
+    return 0;
+}
+```
