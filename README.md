@@ -843,9 +843,9 @@ struct {
 } <struct_name>;
 ```
 
-type: Kiểu dữ liệu của trường bit (thường là uint8_t, int, unsigned int). 
-member_name: Tên của trường bit. 
-width: Số bit mà trường bit chiếm.
+* type: Kiểu dữ liệu của trường bit (thường là uint8_t, int, unsigned int).
+* member_name: Tên của trường bit. 
+* width: Số bit mà trường bit chiếm.
 
 **Ví dụ:**
 ``` C
