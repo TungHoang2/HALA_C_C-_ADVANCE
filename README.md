@@ -832,3 +832,48 @@ int main() {
     return 0;
 }
 ```
+
+### Bit Field
+
+**Khai báo:**
+
+``` C
+struct {
+    <type> member_name : width;
+} <struct_name>;
+```
+
+type: Kiểu dữ liệu của trường bit (thường là uint8_t, int, unsigned int). 
+member_name: Tên của trường bit. 
+width: Số bit mà trường bit chiếm.
+
+**Ví dụ:**
+``` C
+typedef struct {
+    uint8_t LED1: 1;   
+    uint8_t LED2: 1;
+    uint8_t LED3: 1;
+    uint8_t LED4: 1;
+    uint8_t LED5: 1;
+    uint8_t LED6: 1;
+    uint8_t LED7: 1;
+    uint8_t LED8: 1;
+} LEDStatus;
+```
+**Giải thích:** Struct LEDStatus có kích thước 1 byte khi sử dụng bit field. Nếu không sử dụng là 8 bytes
+
+
+**Ví dụ:**
+
+``` C
+struct flags {
+    unsigned int is_active : 1;
+    unsigned int is_completed : 1;
+    unsigned int error_code : 3;
+};
+```
+**Ưu điểm:**
+
+* Tiết kiệm bộ nhớ.
+* Tăng tốc độ: Trong một số trường hợp, truy cập trực tiếp vào các bit có thể nhanh hơn so với truy cập vào các byte.
+* Dễ đọc: bit field có thể làm cho mã dễ đọc hơn, đặc biệt là khi đang làm việc với các cấu trúc dữ liệu nhị phân.
