@@ -1035,3 +1035,133 @@ int main() {
 * Sử dụng union cho frame để có địa chỉ chứa receive_data và transmit_data
 * (char*) để đổi kiểu dữ liệu và con trỏ để trỏ vào địa chỉ cụ thể
 
+
+# Memory Layout
+## Text-segment
+<ul>
+  <li>Biến constant global và chuỗi mà con trỏ kiểu char trỏ đến</li>
+  <li>Read-only</li>
+  <li>Chứa mã máy để thực thi chương trình</li>
+</ul>
+
+## Initialized data – DS(Data-segment)
+<ul>
+  <li>Chứa các biến toàn cục được khởi tạo giá trị khác 0</li>
+  <li>Chứa các biến static (global + local) được khởi tạo với giá trị khác 0</li>
+  <li>Ngoại trừ biến hằng số và con trỏ kiểu char (trường hợp đặc biệt nằm ở text-segment)</li>
+  <li>Có thể đọc và thay đổi giá trị của biến (read – write)</li>
+  <li>Biến được thu hồi sau khi kết thúc chương trình</li>
+</ul>
+
+## Uninitialized data – bss
+<ul>
+  <li>Chứa các biến toàn cục và cục bộ chưa được khởi tạo hoặc khởi tạo với giá trị 0 </li>
+  <li>Có thể đọc và ghi (read-write)</li>
+  <li>Tất cả biến sẽ được thu hồi sau khi kết thúc chương trình</li>
+</ul>
+
+
+## Stack 
+<ul>
+  <li>Chức các biến cục bộ, tham số truyền vào (ngoại trừ biến static cục bộ được lưu vào ds hoặc bss)</li>
+  <li>Biến const cục bộ sẽ được lưu vào phân vùng stack</li>
+  <li>Read-write</li>
+  <li>Sau khi kết thúc hàm sẽ thu hồi vùng nhớ</li>
+  <li>Hoạt động theo cơ chế LIFO (Last In First Out)</li>
+</ul>
+
+## Heap 
+<ul>
+  <li>Được sử dụng để cấp phát bộ nhớ động. Các biến được cấp phát không có kích thước nhất định và có thể thay đổi trong quá trình thực thi chương trình </li>
+  <li>Sử dụng các hàm malloc(), calloc(), realloc(), free()</li>
+</ul>
+
+## Phân biệt malloc(), calloc(), realloc()
+### malloc():
+<ul>
+  <li>Được sử dụng để phân bố động 1 khối bộ nhớ có kích thước được chỉ định</li>
+  <li>Kiểu trả về là void * và có thể ép kiểu về con trỏ bất kì </li>
+  <li>Giá trị ban đầu của từng ô nhớ mặc định là garbage value</li>
+  <li>Nếu không đủ không gian, việc phân bổ sẽ không thành công và trả về con trỏ NULL.</li>
+  <li>Khi sử dụng phải khai báo thư viện stdlib.h</li>
+</ul>
+
+**Cú pháp:**
+``` C
+ptr = (cast-type*) malloc(byte-size)
+```
+
+**Ví dụ:**
+``` C
+ptr = (int*) malloc(100 * sizeof(int))
+```
+
+Vì kích thước của int là 4 byte, câu lệnh này sẽ phân bổ 400 byte bộ nhớ. Và con trỏ ptr giữ địa chỉ của byte đầu tiên trong bộ nhớ được phân bổ. 
+
+### calloc():
+<ul>
+  <li>Được sử dụng để phân bổ động số lượng khối bộ nhớ được chỉ định của loại được chỉ định (data-type)</li>
+  <li>Nếu không đủ không gian, việc phân bổ sẽ không thành công và trả về con trỏ NULL.</li>
+  <li>Khi sử dụng phải khai báo thư viện stdlib.h</li>
+  <li>Kiểu trả về là void * và có thể ép kiểu về con trỏ bất kì </li>
+</ul>
+
+**Cú pháp:**
+``` C
+ptr = (cast-type*)calloc(n, element-size);
+```
+
+n là số lượng phần tử và element-size là kích thước của mỗi phần tử.
+
+**Ví dụ:**
+``` C
+ptr = (float*) calloc(25, sizeof(float));
+```
+
+Câu lệnh này phân bổ không gian liền kề trong bộ nhớ cho 25 phần tử, mỗi phần tử có kích thước bằng float.
+
+### 2 điểm khác biệt so với malloc():
+* Khởi tạo mỗi khối với giá trị mặc định là 0
+* Có 2 tham số hoặc đối số khi so sánh với malloc()
+
+## free():
+Khi sử dụng xong các vùng nhớ sẽ không tự động thu hồi mà phải dùng free() để thu hồi bộ nhớ
+
+## realloc():
+<ul>
+  <li>Được sử dụng để phân bổ lại bộ nhớ đã được phân bổ trước đó. Nếu bộ nhớ được phân bổ trước đó của malloc hoặc calloc không đủ, thì sẽ sử dụng recalloc() để phân bổ lại bộ nhớ động </li>
+  <li>Việc phân bổ lại sẽ duy trì giá trị của các bộ nhớ cũ và gán giá trị rác cho các vùng nhớ mới.</li>
+    <li>Có thể sử dụng realloc thay free() để thu hồi vùng nhớ.</li>
+</ul>
+
+**Cú pháp:**
+``` C
+ptr = realloc(ptr, newSize); 
+```
+
+trong đó ptr được phân bổ lại với kích thước mới 'newSize'.
+
+
+## Phân biệt giữa stack và heap:
+### Stack: 
+<ul>
+  <li>Truy cập nhanh: Do cấu trúc đơn giản nên việc truy cập dữ liệu rất nhanh</li>
+  <li>Quản lý tự động: Hệ điều hành tự động cấp phát và giải phóng bộ nhớ trên stack khi hàm được gọi và kết thúc</li>
+  <li>Kích thước hạn chế: Stack có kích thước cố định, nếu gọi quá nhiều hàm đệ quy hoặc khai báo quá nhiều biến cục bộ có thể dẫn đến tràn stack (stack overflow)</li>
+  <li>Lưu các biến cục bộ, tham số, địa chỉ trả về</li>
+</ul>
+
+
+### Heap:
+<ul>
+  <li>Truy cập chậm hơn, dễ bị rò rỉ bộ nhớ </li>
+  <li>Quản lý thủ công: Được quản lý bởi lập trình viên, dữ liệu trong Heap sẽ không bị hủy khi kết thúc chương trình, vậy nên phải tự giải phóng bộ nhớ bằng hàm free().</li>
+  <li>Kich thước lớn: Heap thường có kích thước lớn hơn Stack, cho phép cấp phát vùng nhớ lớn hơn</li>
+  <li>Linh hoạt: Có thể cấp phát hoặc thu hồi vùng nhớ theo yêu cầu của chương trình</li>
+  <li>Lưu các đối tượng động, mảng lớn, cấu trúc dữ liệu phức tạp.</li>
+</ul>
+
+
+
+
+
