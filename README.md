@@ -1161,7 +1161,65 @@ trong đó ptr được phân bổ lại với kích thước mới 'newSize'.
   <li>Lưu các đối tượng động, mảng lớn, cấu trúc dữ liệu phức tạp.</li>
 </ul>
 
+# C++
+## Class
 
+**Khái niệm:** Trong C++, class (lớp) là một cấu trúc dữ liệu giúp tạo ra các đối tượng (objects) với các thuộc tính (properties) và phương thức (methods).
 
+**Lưu ý:** 
+* Các properties mặc định sẽ là private. Nếu muốn truy cập từ bên ngoài thì phải khai báo public.
+* Constructor là một method sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class.
+* Destructor là một method sẽ được tự động gọi khi object được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+
+**Ví dụ:**
+
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class BankAccount{
+    private:
+    int AccountNumber;
+    string AccountHolder;
+    int balance;
+
+    public:
+    BankAccount(int AccNum, string AccHol, int initalBalance =0) 
+        : AccountNumber(AccNum), AccountHolder(AccHol), balance(initalBalance) {}
+
+    void deposit(int num){
+        if(num >= 0){
+            balance += num;
+            cout << "Gui thanh cong: " << num << "VND" << endl;
+        }else{
+            cout << "So tien khong hop le" << endl;
+        }
+    }
+
+    void withdraw(int num){
+        if(num < 0 || num > balance){
+            cout << "So tien khong hop le hoac vuot qua so du" << endl; 
+        }else{
+            balance -= num;
+            cout << "Rut thanh cong: " << num << "VND" << endl;
+        }
+    }
+
+    void displayBalance(){
+        cout << "So tien con lai trong tai khoan: " << balance << "VND" << endl;
+    }
+};
+
+int main(){
+    BankAccount myAccount(123,"Tung", 50000);
+
+    myAccount.deposit(100000);
+    myAccount.displayBalance();
+
+    myAccount.withdraw(2000000);
+    myAccount.displayBalance();
+}
+```
 
 
