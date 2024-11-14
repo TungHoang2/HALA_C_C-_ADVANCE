@@ -1222,4 +1222,330 @@ int main(){
 }
 ```
 
+## OOP
+### Encapsulation
+
+**Khái niệm:** tính đóng gói đề cập đến việc ẩn các properties bên trong của một đối tượng và chỉ cung cấp những methods cần thiết để tương tác với đối tượng đó. 
+
+**Mục tiêu:** bảo vệ dữ liệu và tránh việc truy cập hoặc sửa đổi trực tiếp các thuộc tính (properties) của đối tượng từ bên ngoài lớp.
+
+**Đóng gói thực hiện qua hai phần chính:**
+* Ẩn dữ liệu (Data Hiding): Các thuộc tính của lớp thường được khai báo là private hoặc protected để không cho phép truy cập trực tiếp từ bên ngoài.
+* Cung cấp giao diện (Interface): Các phương thức public được cung cấp để cho phép người dùng tương tác với đối tượng mà không cần biết chi tiết nội bộ của nó.
+
+**Ứng dụng:**
+* Bảo vệ dữ liệu: Bằng cách ẩn các thuộc tính khỏi truy cập trực tiếp từ bên ngoài, có thể bảo vệ dữ liệu khỏi những thay đổi không mong muốn hoặc lỗi lập trình.
+* Giúp kiểm tra các điều kiện khi khởi tạo bằng các methods mà khởi tạo trực tiếp ở main không làm được.
+
+``` C++
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+private:
+    string brand; // Thương hiệu xe (private)
+    int speed;   // Tốc độ xe (private)
+    
+public:
+    // Constructor
+    Car(string m, int s) : brand(m), speed(s) {}
+
+    // Phương thức getter để lấy thông tin về thương hiệu
+    string getBrand() const {
+        return brand;
+    }
+
+    // Phương thức setter để thay đổi tốc độ
+    void setSpeed(int s) {
+        if(s >= 0 && s <= 300) { // Kiểm tra tốc độ hợp lệ
+            speed = s;
+        } else {
+            cout << "Tốc độ không hợp lệ!" << endl;
+        }
+    }
+
+    // Phương thức getter để lấy tốc độ
+    int getSpeed() const {
+        return speed;
+    }
+
+    // Phương thức tăng tốc
+    void accelerate(int increment) {
+        if (speed + increment <= 300) {
+            speed += increment;
+        } else {
+            speed = 300; // Tốc độ tối đa là 300 km/h
+        }
+    }
+
+    // Phương thức giảm tốc
+    void brake(int decrement) {
+        if (speed - decrement >= 0) {
+            speed -= decrement;
+        } else {
+            speed = 0; // Tốc độ không thể nhỏ hơn 0
+        }
+    }
+};
+
+int main() {
+    // Tạo đối tượng Car với thương hiệu "Toyota" và tốc độ ban đầu là 50 km/h
+    Car myCar("Toyota", 50);
+
+    // Lấy thông tin về thương hiệu và tốc độ xe
+    cout << "Thương hiệu xe: " << myCar.getBrand() << endl;
+    cout << "Tốc độ ban đầu: " << myCar.getSpeed() << " km/h" << endl;
+
+    // Tăng tốc xe
+    myCar.accelerate(20);
+    cout << "Tốc độ sau khi tăng tốc: " << myCar.getSpeed() << " km/h" << endl;
+
+    // Giảm tốc xe
+    myCar.brake(30);
+    cout << "Tốc độ sau khi giảm tốc: " << myCar.getSpeed() << " km/h" << endl;
+
+    // Cố gắng set tốc độ vượt quá giới hạn
+    myCar.setSpeed(350); // Tốc độ không hợp lệ
+
+    return 0;
+}
+```
+
+### Inheritance
+**Khái niệm:** Tính kế thừa ( Inheritance) là khả năng sử dụng lại các property và method của một class trong một class khác
+
+**Ứng dụng:** Tính kế thừa giúp tái sử dụng mã nguồn, giảm sự trùng lặp và tạo ra cấu trúc lớp có thể mở rộng, dễ dàng bảo trì.
+
+
+**Có 3 kiểu kế thừa:** public, private và protected. Những property và method được kế thừa từ class cha sẽ có quyền truy cập của class con tương ứng với kiểu kế thừa.
+
+* Public: method, property bên trong và object bên ngoài đều truy cập được 
+* Protected:
+
+Thuộc tính protected không thể bị truy cập trực tiếp từ bên ngoài, giúp đảm bảo dữ liệu nội bộ của đối tượng không bị thay đổi ngoài ý muốn (giống private)
+
+Các class con có thể kế thừa được
+* Private:
+
+Object, class kế thừa không thể truy cập được
+
+Nội bộ class
+
+
+**Lưu ý:**
+* Chỉ kế thừa được property và method ở phạm vi public hoặc protected
+* Kế thừa public: Nếu kế thừa public thì sẽ copy giữ nguyên phạm vi của property hoặc method 
+* Kế thừa protected: Chuyển toàn bộ phạm vi về protected (Những property hay method nằm ở phạm vi private không thể kế thừa)
+* Kế thừa private: Chuyển tất cả về private
+
+**Ví dụ:**
+
+``` C++
+class Animal {
+public:
+    void eat() {
+        cout << "Eating food" << endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void bark() {
+        cout << "Barking" << endl;
+    }
+};
+
+int main() {
+    Dog dog;
+    dog.eat(); // Kế thừa từ Animal
+    dog.bark(); // Đặc trưng của Dog
+}
+```
+**Ví dụ:** Kế thừa và ghi đè chức năng của lớp cha
+
+``` C++
+class Animal {
+public:
+    void sound() {
+        cout << "Some generic animal sound" << endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void sound() { 
+        cout << "Barking" << endl; // Ghi đè phương thức sound()
+    }
+};
+
+int main() {
+    Dog dog;
+    dog.sound(); // Output: "Barking"
+}
+```
+
+### Abstraction
+**Khái niệm:** Tính trừu tượng trong OOP là việc che giấu chi tiết triển khai và chỉ cung cấp giao diện cần thiết cho người dùng. Tính trừu tượng đề cập đến việc ẩn đi các chi tiết cụ thể của một đối tượng và chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó.
+
+**Công dụng:** Tính trừu tượng giúp giảm phức tạp, tăng khả năng mở rộng, và dễ bảo trì.
+
+**Ví dụ:** Lớp trừu tượng Animal với phương thức thuần ảo sound() buộc các lớp con như Dog hoặc Cat phải triển khai chi tiết cách phát âm thanh.
+
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class Animal {
+public:
+    virtual void sound() =0 ;
+};
+
+class Dog : public Animal {
+public:
+    void sound() override { 
+        cout << "Gau Gau" << endl; // Ghi đè phương thức sound()
+    }
+};
+
+class Cat: public Animal {
+    public:
+    void sound() override{
+        cout << "Meo meo" << endl; // Ghi đè phương thức sound()
+    } 
+};
+
+int main() {
+    Dog dog;
+    dog.sound(); 
+
+    Cat cat;
+    cat.sound();
+}
+```
+
+### Polymorphism
+
+**Khái niệm:** Tính đa hình trong C++ là khả năng sử dụng cùng một giao diện nhưng hành vi khác nhau tùy vào đối tượng thực tế.
+
+**Có 2 loại đa hình:**
+1. Compile-time:
+* Function Overloading : Khi có nhiều hàm có cùng tên nhưng tham số khác nhau
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class calculate_Sum
+{
+public:
+    void sum(int a, int b)
+    {
+        cout << "Tong = " << a + b << endl;
+    }
+
+    void sum(int a, int b, double c)
+    {
+        cout << "Tong = " << a + b + c << endl;
+    }
+
+    void sum(double a, double b)
+    {
+        cout << "Tong = " << a + b << endl;
+    }
+};
+
+int main()
+{
+    calculate_Sum s1;
+    s1.sum(1, 2);
+    s1.sum(4, 5, 5.6);
+    s1.sum(4.5, 1, 5);
+}
+```
+* Operator Overloading: Cung cấp cho các toán tử một ý nghĩa đặc biệt cho một kiểu dữ liệu (Ví dụ như có kiểu phân số nhưng C++ không có sẵn các phép toán +,-,x,: thì khi đó sử dụng operator overloading)
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class PhanSo
+{
+    private: 
+    double tuSo;
+    double mauSo;
+    
+    public:
+    PhanSo(double t = 0, double m = 1) : tuSo(t), mauSo(m){}
+
+    PhanSo operator + (PhanSo &other){
+        PhanSo ketqua;
+        ketqua.tuSo = this->tuSo * other.mauSo + this->mauSo * other.tuSo;
+        ketqua.mauSo = this->mauSo * other.mauSo; 
+        return ketqua;
+    }
+
+    void display(){
+        cout << "Tu so: " << this->tuSo << endl;
+        cout << "Mau so: " << this->mauSo << endl;
+    }
+};
+
+int main()
+{
+    PhanSo p1(1,10);
+    PhanSo p2(6,5);
+
+    PhanSo result;
+    result = p1 + p2;
+    result.display();
+}
+```
+2. Run -time:
+* Virtual Functions
+**Ví dụ:** hàm makeSound() gọi phương thức sound() của cả Dog và Cat, nhưng Dog kêu "Gâu gâu", còn Cat kêu "Meo meo". Nhờ virtual functions, chương trình tự chọn đúng hành vi tại runtime. Tính đa hình giúp code linh hoạt và dễ mở rộng.
+
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class Animal {
+public:
+    virtual void sound() =0 ;
+};
+
+class Dog : public Animal {
+public:
+    void sound() override { 
+        cout << "Gau Gau" << endl; // Ghi đè phương thức sound()
+    }
+};
+
+class Cat: public Animal {
+    public:
+    void sound() override{
+        cout << "Meo meo" << endl; // Ghi đè phương thức sound()
+    } 
+};
+
+int main() {
+    Dog dog;
+    dog.sound(); 
+
+    Cat cat;
+    cat.sound();
+}
+```
+
+**Lưu ý:**
+* 1 class có ít nhất 1 pure virtual function gọi là 1 class trừu tượng sẽ không thể khai báo 1 object bình thường vì method chưa có tính năng gì. Nhưng gọi thông qua con trỏ thì bình thường vì bản chất là trỏ đến 1 object khác và method bên trong có nội dung đầy đủ
+* Từ khóa override để phân biệt giữa đa hình và kế thừa (khi có override thì biết đó là đa hình) và nhìn vào là biết đang ghi đè 1 hàm ảo
+* Method bình thường --> ghi đè --> tính kế thừa
+* Method ảo (virtual) --> ghi đè --> tính đa hình (run-time)
+
+
+
 
