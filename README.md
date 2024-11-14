@@ -1319,18 +1319,13 @@ int main() {
 
 
 **Có 3 kiểu kế thừa:** public, private và protected. Những property và method được kế thừa từ class cha sẽ có quyền truy cập của class con tương ứng với kiểu kế thừa.
-
-* Public: method, property bên trong và object bên ngoài đều truy cập được 
-* Protected:
-
-Thuộc tính protected không thể bị truy cập trực tiếp từ bên ngoài, giúp đảm bảo dữ liệu nội bộ của đối tượng không bị thay đổi ngoài ý muốn (giống private)
-
-Các class con có thể kế thừa được
-* Private:
-
-Object, class kế thừa không thể truy cập được
-
-Nội bộ class
+1. Public: method, property bên trong và object bên ngoài đều truy cập được
+2. Protected:
+* Thuộc tính protected không thể bị truy cập trực tiếp từ bên ngoài, giúp đảm bảo dữ liệu nội bộ của đối tượng không bị thay đổi ngoài ý muốn (giống private)
+* Các class con có thể kế thừa được
+3. Private:
+* Object, class kế thừa không thể truy cập được
+* Nội bộ class
 
 
 **Lưu ý:**
@@ -1432,6 +1427,7 @@ int main() {
 **Có 2 loại đa hình:**
 1. Compile-time:
 * Function Overloading : Khi có nhiều hàm có cùng tên nhưng tham số khác nhau
+
 **Ví dụ:**
 ``` C++
 #include <iostream>
@@ -1505,6 +1501,7 @@ int main()
 ```
 2. Run -time:
 * Virtual Functions
+
 **Ví dụ:** hàm makeSound() gọi phương thức sound() của cả Dog và Cat, nhưng Dog kêu "Gâu gâu", còn Cat kêu "Meo meo". Nhờ virtual functions, chương trình tự chọn đúng hành vi tại runtime. Tính đa hình giúp code linh hoạt và dễ mở rộng.
 
 ``` C++
@@ -1541,6 +1538,7 @@ int main() {
 ```
 
 **Lưu ý:**
+
 * 1 class có ít nhất 1 pure virtual function gọi là 1 class trừu tượng sẽ không thể khai báo 1 object bình thường vì method chưa có tính năng gì. Nhưng gọi thông qua con trỏ thì bình thường vì bản chất là trỏ đến 1 object khác và method bên trong có nội dung đầy đủ
 * Từ khóa override để phân biệt giữa đa hình và kế thừa (khi có override thì biết đó là đa hình) và nhìn vào là biết đang ghi đè 1 hàm ảo
 * Method bình thường --> ghi đè --> tính kế thừa
