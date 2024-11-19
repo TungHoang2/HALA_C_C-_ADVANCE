@@ -1545,5 +1545,130 @@ int main() {
 * Method ảo (virtual) --> ghi đè --> tính đa hình (run-time)
 
 
+## Template
+### Function Template
+**Khái niệm:** Cho phép định nghĩa một hàm tổng quát, có thể hoạt động với nhiều kiểu dữ liệu khác nhau.
+
+**Công dụng:**
+* Tránh lặp lại mã khi cần viết các hàm giống nhau cho các kiểu dữ liệu khác nhau.
+* Thích hợp cho các thao tác chung như tính toán, so sánh, hoặc xử lý dữ liệu.
+
+**Trường hợp sử dụng:**
+* Các hàm thực hiện logic giống nhau nhưng cho các kiểu dữ liệu khác nhau:
+1. Tính tổng, tìm giá trị lớn nhất/nhỏ nhất.
+2. So sánh hai đối tượng.
+
+**Cú pháp cơ bản:**
+``` C++
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+```
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+using namespace std;
+
+template <typename T>
+auto add(T a, T b){
+    return a + b;
+}
 
 
+int main(){
+    cout << add(3.4,4.5) << endl;
+
+    cout << add(3,5) << endl;
+}
+```
+
+## Class template
+**Khái niệm:** Cho phép định nghĩa một lớp tổng quát, có thể làm việc với nhiều kiểu dữ liệu.
+
+**Công dụng:** khi thiết kế các cấu trúc dữ liệu hoặc lớp có thể hoạt động với bất kỳ kiểu dữ liệu nào.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+using namespace std;
+
+template <typename T>
+class MyClass{
+    private:
+    T data;
+
+    public:
+
+    MyClass(T value) : data(value){}
+
+    void display(){
+        cout << "Giá trị: " << data << endl;
+    }
+};
+
+
+int main(){
+    MyClass<int> obj1(3);
+    obj1.display();
+
+    MyClass<string> obj2("Hello");
+    obj2.display();
+
+    return 0;
+}
+```
+
+## Variadic template
+**Khái niệm:** Loại template cho phép làm việc với số lượng tham số không xác định.
+
+**Công dụng:** Xử lý danh sách tham số động hoặc các kiểu dữ liệu hỗn hợp.
+
+**Ví dụ:**
+```  C++
+#include <iostream>
+
+using namespace std;
+
+// Class tổng quát sử dụng Variadic Template
+template<typename... Args>
+class MyClass;
+
+// Định nghĩa class khi không có đối số
+template<>
+class MyClass<>{
+    public:
+        void display() {
+            cout << "No arguments" << endl;
+        }
+};
+
+// Định nghĩa class khi có ít nhất một đối số
+template<typename T, typename... Args> 
+class MyClass<T, Args...> : public MyClass<Args...>{
+    private:
+        T first_;
+
+    public:
+        MyClass(T first, Args... args): first_(first),  MyClass<Args...>(args...){} // T first_ = first, Args1 args1_ = args1, Args2 args2_ = args2,...
+
+        void display(){
+            cout << first_ << " ";
+            MyClass<Args...>::display(); // Gọi hàm display của lớp cơ sở
+        }   
+
+};
+
+int main() 
+{
+    MyClass<int, double, char> obj(1, 2.5, 'A');
+    obj.display();  // Kết quả: 1 2.5 A
+
+    MyClass obj1;
+    obj1.display();
+    return 0;
+}
+```
