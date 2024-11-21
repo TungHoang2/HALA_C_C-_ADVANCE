@@ -1162,7 +1162,7 @@ trong đó ptr được phân bổ lại với kích thước mới 'newSize'.
 </ul>
 
 # C++
-## Class
+# Class
 
 **Khái niệm:** Trong C++, class (lớp) là một cấu trúc dữ liệu giúp tạo ra các đối tượng (objects) với các thuộc tính (properties) và phương thức (methods).
 
@@ -1222,8 +1222,8 @@ int main(){
 }
 ```
 
-## OOP
-### Encapsulation
+# OOP
+## Encapsulation
 
 **Khái niệm:** tính đóng gói đề cập đến việc ẩn các properties bên trong của một đối tượng và chỉ cung cấp những methods cần thiết để tương tác với đối tượng đó. 
 
@@ -1312,7 +1312,7 @@ int main() {
 }
 ```
 
-### Inheritance
+## Inheritance
 **Khái niệm:** Tính kế thừa ( Inheritance) là khả năng sử dụng lại các property và method của một class trong một class khác
 
 **Ứng dụng:** Tính kế thừa giúp tái sử dụng mã nguồn, giảm sự trùng lặp và tạo ra cấu trúc lớp có thể mở rộng, dễ dàng bảo trì.
@@ -1380,7 +1380,7 @@ int main() {
 }
 ```
 
-### Abstraction
+## Abstraction
 **Khái niệm:** Tính trừu tượng trong OOP là việc che giấu chi tiết triển khai và chỉ cung cấp giao diện cần thiết cho người dùng. Tính trừu tượng đề cập đến việc ẩn đi các chi tiết cụ thể của một đối tượng và chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó.
 
 **Công dụng:** Tính trừu tượng giúp giảm phức tạp, tăng khả năng mở rộng, và dễ bảo trì.
@@ -1420,7 +1420,7 @@ int main() {
 }
 ```
 
-### Polymorphism
+## Polymorphism
 
 **Khái niệm:** Tính đa hình trong C++ là khả năng sử dụng cùng một giao diện nhưng hành vi khác nhau tùy vào đối tượng thực tế.
 
@@ -1545,8 +1545,8 @@ int main() {
 * Method ảo (virtual) --> ghi đè --> tính đa hình (run-time)
 
 
-## Template
-### Function Template
+# Template
+## Function Template
 **Khái niệm:** Cho phép định nghĩa một hàm tổng quát, có thể hoạt động với nhiều kiểu dữ liệu khác nhau.
 
 **Công dụng:**
@@ -1672,7 +1672,7 @@ int main()
     return 0;
 }
 ```
-## Namespace
+# Namespace
 **Khái niệm:** Namespace là một cơ chế giúp tổ chức các tên (tên biến, hàm, lớp,...) trong một phạm vi nhất định, tránh xung đột tên khi chúng ta sử dụng nhiều thư viện hoặc khi cùng một tên được sử dụng trong các phần khác nhau của chương trình.
 
 **Từ khóa using trong Namespace:** 
@@ -1718,7 +1718,7 @@ int main(int argc, char const *argv[])
 }
 ```
 
-### Namespace lồng nhau
+## Namespace lồng nhau
 Một namespace có thể chứa một namespace khác bên trong nó.
 
 **Ví dụ:**
@@ -1754,7 +1754,7 @@ int main() {
 }
 ```
 
-### Namespace mở rộng
+## Namespace mở rộng
 Namespace có thể được mở rộng bằng cách khai báo nhiều lần cùng một tên namespace trong các phần khác nhau của chương trình. Các khai báo này sẽ được ghép lại thành một namespace duy nhất.
 
 **Ví dụ:**
