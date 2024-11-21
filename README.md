@@ -1672,3 +1672,118 @@ int main()
     return 0;
 }
 ```
+## Namespace
+**Khái niệm:** Namespace là một cơ chế giúp tổ chức các tên (tên biến, hàm, lớp,...) trong một phạm vi nhất định, tránh xung đột tên khi chúng ta sử dụng nhiều thư viện hoặc khi cùng một tên được sử dụng trong các phần khác nhau của chương trình.
+
+**Từ khóa using trong Namespace:** 
+* Từ khóa using cho phép bạn sử dụng các phần tử trong namespace mà không cần phải sử dụng toán tử '::' mỗi khi truy cập.
+* Chỉ sử dụng using namespace khi member muốn truy cập đến là duy nhất.
+
+**Tại sao cần sử dụng namespace:**
+* Tránh xung đột tên: Khi có nhiều thư viện hoặc nhiều phần của chương trình sử dụng cùng một tên, namespace giúp phân biệt chúng với nhau.
+* Giúp chia nhỏ chương trình thành các phần có liên quan, tăng khả năng đọc và bảo trì.
+* Giúp ngăn chặn việc vô tình ghi đè lên các tên đã tồn tại.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+namespace A{
+    string name = "Tung Le";
+
+    void display(){
+        cout << "Name: " << name << endl;
+    }
+}
+
+namespace B{
+    string name = "Tung Hoang";
+
+    void display(){
+        cout << "Name: " << name << endl;
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+    cout << "Name: " << A::name << endl;
+    cout << "Name: " << B::name << endl;
+
+    A::display();
+    B::display();
+    return 0;
+}
+```
+
+### Namespace lồng nhau
+Một namespace có thể chứa một namespace khác bên trong nó.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+// Định nghĩa namespace bên ngoài
+namespace OuterNamespace {
+    int outerValue = 100;
+
+    // Định nghĩa namespace lồng bên trong
+    namespace InnerNamespace {
+        int innerValue = 200;
+
+        void displayInnerValue() {
+            std::cout << "InnerNamespace::innerValue = " << innerValue << std::endl;
+        }
+    }
+
+    void displayOuterValue() {
+        std::cout << "OuterNamespace::outerValue = " << outerValue << std::endl;
+    }
+}
+
+int main() {
+    // Truy cập các thành phần trong OuterNamespace
+    OuterNamespace::displayOuterValue();
+
+    // Truy cập các thành phần trong InnerNamespace (lồng bên trong OuterNamespace)
+    OuterNamespace::InnerNamespace::displayInnerValue();
+
+    return 0;
+}
+```
+
+### Namespace mở rộng
+Namespace có thể được mở rộng bằng cách khai báo nhiều lần cùng một tên namespace trong các phần khác nhau của chương trình. Các khai báo này sẽ được ghép lại thành một namespace duy nhất.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+// Định nghĩa namespace ban đầu
+namespace MyNamespace {
+    int value = 10;
+
+    void displayValue() {
+        std::cout << "Value from MyNamespace: " << value << std::endl;
+    }
+}
+
+// Mở rộng namespace MyNamespace
+namespace MyNamespace {
+    void additionalFunction() {
+        std::cout << "This is an additional function in MyNamespace." << std::endl;
+    }
+}
+
+int main() {
+    // Truy cập các thành phần ban đầu trong namespace
+    MyNamespace::displayValue();
+
+    // Truy cập hàm mới được thêm vào qua mở rộng namespace
+    MyNamespace::additionalFunction();
+
+    return 0;
+}
+```
