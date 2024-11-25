@@ -1787,3 +1787,343 @@ int main() {
     return 0;
 }
 ```
+## Standard Template Library (STL)
+**Khái niệm:** Standard Template Library ( STL) là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các template classes và functions để thực hiện nhiều loại cấu trúc dữ liệu và các thuật toán phổ biến. STL đã trở thành một phần quan trọng của ngôn ngữ C++ và làm cho việc lập trình trở nên mạnh mẽ, linh hoạt và hiệu quả.
+
+**Một số thành phần chính của STL:**
+* Container
+* Iterator
+* Algorithms
+* Functor
+
+### Container
+**Khái niệm:** Một container là một cấu trúc dữ liệu chứa nhiều phần tử theo một cách cụ thể. STL (Standard Template Library) cung cấp một số container tiêu biểu giúp lưu trữ và quản lý dữ liệu.
+
+**Một số container tiêu biểu là:**
+* Vector
+* List
+* Map
+* Array
+
+### Vector
+**Khái niệm:**
+* Các vectơ giống như các mảng động với khả năng tự động thay đổi kích thước khi một phần tử được chèn hoặc xóa.
+* Địa chỉ các phần tử vectơ liền kề nhau --> dễ dàng truy cập 
+
+
+**Một số đặc điểm chính của vector:**
+* Vector là một mảng động, tức là có khả năng thay đổi kích thước một cách linh hoạt.
+* Truy cập ngẫu nhiên: Việc truy cập các phần tử của vector có thể được thực hiện bằng cách sử dụng chỉ số.
+* Hiệu suất chèn và xóa: Chèn và xóa phần tử ở cuối vector có hiệu suất tốt. Tuy nhiên, chèn và xóa ở vị trí bất kỳ có thể đòi hỏi di chuyển một số phần tử.
+
+**Cú pháp khai báo:**
+vector  <Kiểu dữ liệu>  Tên vector;
+
+**Sử dụng vector khi:**
+* Cần truy cập ngẫu nhiên đến các phần tử.
+* Thực hiện nhiều thao tác chèn/xóa ở cuối danh sách.
+* Số lượng phần tử có thể biết trước hoặc thay đổi ít.
+
+**Các member function phổ biến thường dùng:**
+Các member function thường dùng:
+* begin() – Trả về con trỏ trỏ đến phần tử đầu tiên trong vector
+* end() – Trả về con trỏ trỏ đến địa chỉ sau phần tử cuối cùng trong vectơ
+* push_back(): Thêm 1 phần tử vào cuối vector
+* pop_back(): Xóa phần tử cuối cùng của vector
+* size(): Trả về số lượng phần tử hiện có trong vector
+* empty(): Kiểm tra vector có rỗng không (trả về true nếu vector không có phần tử nào)
+* resize(n): Thay đổi kích thước của vector thành n phần tử. Nếu n lớn hơn kích thước hiện tại các phần tử thêm vào sẽ được khởi tạo bằng 0
+* at(index): Truy cập phần tử ở vị trí index.
+* front() và back(): Truy cập phần tử đầu tiên và cuối cùng của vector.
+* clear(): Xóa tất cả các phần tử của vector, đưa size về 0
+* insert(position, value): Chèn một phần tử value vào vị trí position trong vector.
+* erase(position): Xóa phần tử tại vị trí position.
+* swap(other_vector): Hoán đổi nội dung của vector hiện tại với other_vector.
+
+**Các cách truy cập vào vector:**
+``` C++
+    // Cách 1
+    for (int i=0; i<arr.size(); i++){
+        cout << "Value: " << arr[i] << endl;
+    }  
+
+
+    // Cách 2
+    for (int i=0; i<arr.size(); i++){
+        cout << "Value: " << arr.at(i) << endl; // đọc giá trị phần tử
+    } 
+
+    // Cách 3
+    for (auto item : arr){
+        cout << "Value: " << item << endl;
+    }
+
+    // Cách 4
+    vector<int>::iterator it;
+    for (it = arr.begin(); it != arr.end(); ++it){
+        cout << "Value: " << *it << endl;
+}
+```
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main(int argc, char const *argv[]){
+    vector<int> arr = {2, 5, 7, 4, 9};
+
+    arr.insert(arr.end(), 18);      // thêm phần tử vào cuối vector // giống push_back()
+    arr.insert(arr.begin(), 50);    // thêm phần tử vào đầu vector
+    arr.insert(arr.begin() + 4, 25);
+
+    cout << "Size of vector: " << arr.size() << endl;
+
+    for (auto item : arr){
+        cout << "Value: " << item << endl;
+    }
+
+    cout << "------------------\n";
+
+    arr.erase(arr.begin());        // xóa phần tử đầu tiên
+    arr.erase(arr.begin() + 2);
+    arr.erase(arr.end()-1);      // xóa phần tử cuối cùng // giống pop_back()
+
+    cout << "Size of vector: " << arr.size() << endl;
+
+    for (auto item : arr){
+        cout << "Value: " << item << endl;
+    }
+
+    cout << "------------------\n";
+
+    arr.erase(arr.begin(), arr.begin() + 3);
+
+    cout << "Size of vector: " << arr.size() << endl;
+
+    for (auto item : arr){
+        cout << "Value: " << item << endl;
+    }
+
+    return 0;
+}
+
+```
+
+### List
+**Khái niệm:**List là một container trong STL của C++, triển khai dưới dạng danh sách liên kết hai chiều. 
+
+**Một số đặc điểm quan trọng của list:**
+* Truy cập tuần tự: Truy cập các phần tử của list chỉ có thể thực hiện tuần tự, không hỗ trợ truy cập ngẫu nhiên.
+* Hiệu suất chèn và xóa: Chèn và xóa ở bất kỳ vị trí nào trong danh sách có hiệu suất tốt hơn so với vector. Điều này đặc biệt đúng khi thêm/xóa ở giữa danh sách.
+
+**Cú pháp khai báo:**
+``` C++
+list <kiểu_dữ_liệu> tên_danh_sách;
+```
+
+**Các thao tác cơ bản với list:**
+* front() – Trả về giá trị của phần tử đầu tiên trong danh sách.
+* back() – Trả về giá trị của phần tử cuối cùng trong danh sách.
+* push_front() – Thêm phần tử mới vào đầu danh sách.
+* push_back() – Thêm phần tử mới vào cuối danh sách.
+* pop_front() – Xóa phần tử đầu tiên của danh sách và giảm kích thước của danh sách đi 1.
+* pop_back() – Xóa phần tử cuối cùng của danh sách và giảm kích thước của danh sách đi 1.
+* insert() – Chèn phần tử mới vào danh sách trước phần tử ở vị trí đã chỉ định.
+* size() – Trả về số lượng phần tử trong danh sách.
+* begin() – hàm begin() trả về iterator trỏ đến phần tử đầu tiên của danh sách.
+* end() – hàm end() trả về một iterator trỏ đến phần tử cuối cùng theo sau phần tử cuối cùng.
+* erase() – có thể xóa phần tử ở vị trí chỉ định hoặc xóa trong phạm vi chỉ định
+
+**Sử dụng list khi:**
+* Thực hiện nhiều thao tác chèn/xóa ở bất kỳ vị trí nào trong danh sách.
+* Cần thực hiện nhiều thao tác chèn/xóa mà không làm ảnh hưởng đến các iterators hiện có.
+* Dung lượng không quan trọng hoặc thay đổi thường xuyên.
+
+**Lưu ý:**
+* List gồm những nodes (phần tử) có địa chỉ ngẫu nhiên (không phải địa chỉ liền kề) nên không thể dùng vòng lặp for để in như vector và không thể truy cập đến phần tử ở giữa mà phải truy cập tuần tự.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+int main()
+{  
+    list <int> arr1 = {2,5,7,4,9};
+
+    list <int> :: iterator it;
+
+    int i = 0;
+    for (it = arr1.begin(); it != arr1.end(); ++it)
+    {
+        if (i == 2)
+        {
+            arr1.insert(it,10);
+            break;
+        }
+        i++;
+    }
+
+    i = 0;
+    for (it = arr1.begin(); it != arr1.end(); ++it)
+    {
+        if (i == 4)
+        {
+            arr1.erase(it);
+            break;
+        }
+        i++;
+    }
+    for (auto const var : arr1)
+    {
+        cout << "Value: " << var << endl;
+    }
+    return 0;
+}
+
+
+```
+
+``` C++
+    i = 0;
+    for (it = lst.begin(); it != lst.end(); it++){
+        // xóa node ở vị trị thứ 4 trong list
+        if (i == 4){
+            lst.erase(it);
+        }
+        i++;
+    }
+    list<int>::iterator it1 = lst.begin();
+    
+    it = lst.begin();
+    for (i=0; i<3; i++){
+        it++;
+    }
+
+    lst.erase(it1, it);
+// remove() – Không cần iterator đầu vào; bạn chỉ cần chỉ định giá trị cần xóa. Duyệt qua toàn bộ danh sách và xóa tất cả các phần tử có giá trị khớp với value
+```
+
+### Map
+**Khái niệm:** 
+* Map là một container trong STL của C++, cung cấp một cấu trúc dữ liệu ánh xạ key-value
+* Map lưu trữ các phần tử dưới dạng cặp key-value, trong đó mỗi key phải là duy nhất trong map.
+* Ta có thể thêm phần tử mới vào map bằng cách sử dụng operator [] hoặc hàm insert(). Để xóa phần tử, có thể sử dụng hàm erase().
+* Ta có thể sử dụng iterator để duyệt qua các phần tử của map.
+
+**Cú pháp khai báo:**
+``` C++
+#include <map>
+map<KeyType, ValueType> mapName;
+```
+
+**Các thao tác cơ bản:**
+* Thêm phần tử: Sử dụng cú pháp map[key] = value; hoặc sử dụng insert() để thêm cặp (key, value).
+
+**Lưu ý:**
+* Map không chấp nhận các key trùng lặp. Nếu thêm một cặp (key, value) với key đã tồn tại, giá trị của key đó sẽ bị ghi đè.
+* Map sắp xếp các phần tử theo key theo thứ tự tăng dần.
+
+
+**Ví dụ:**
+``` C++
+student[101] = "Alice";           // Thêm Alice với key là 101
+student.insert({102, "Bob"});     // Thêm Bob với key là 102
+```
+
+* Truy cập giá trị: Truy cập giá trị dựa trên key bằng cú pháp map[key].
+
+**Ví dụ:**
+``` C++
+cout << student[101]; // In ra "Alice"
+```
+
+* Xóa phần tử: Dùng erase(key) để xóa phần tử với key nhất định.
+
+**Ví dụ:**
+``` C++
+student.erase(101); // Xóa phần tử có key là 101
+```
+
+* Duyệt qua các phần tử của map:
+``` C++
+for (auto it = student.begin(); it != student.end(); ++it) {
+    cout << "ID: " << it->first << ", Name: " << it->second << endl;
+}
+```
+Hoặc
+``` C++
+#include <iostream>
+#include <map>
+#include <string>
+
+struct Student {
+    std::string ten;
+    int tuoi;
+    std::string lop;
+};
+
+int main() {
+    std::map<int, Student> Database = {
+        {1, {"Alice", 18, "10A"}},
+        {2, {"Bob", 17, "10B"}},
+        {3, {"Charlie", 19, "10C"}}
+    };
+
+    for (auto item : Database) {
+        std::cout << "ID: " << item.first << " - Ten: " << item.second.ten << " - Tuoi: " << item.second.tuoi << " - Lop: " << item.second.lop << std::endl;
+    }
+
+    return 0;
+}
+```
+
+### Array
+**Khái niệm:**
+* Array là một container có kích thước cố định và có sẵn trong thư viện STL (Standard Template Library)
+* array có kích thước cố định được xác định tại thời điểm biên dịch và không thể thay đổi sau khi được khai báo.
+* array hỗ trợ truy cập ngẫu nhiên vào các phần tử thông qua toán tử []
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+#include <array>
+
+using namespace std;
+
+int main()
+{
+    array <int, 5> arr = {2,3,1,7,6};
+
+    if (arr.empty())
+    {
+        cout << "Array is empty" << endl;
+    }
+    else
+    {
+        cout << "Array it not empty" << endl;
+    }
+    
+
+    for (int i = 0; i < arr.size(); i++)
+    {
+        cout << "Value: " << arr.at(i) << endl;
+    }
+    
+
+    return 0;
+}
+```
+
+### Iterator
+* Iterator là một đối tượng (giống như một con trỏ) trỏ đến một phần tử bên trong container. Chúng ta có thể sử dụng iterator để di chuyển qua nội dung của container. Chúng có thể được hình dung như một thứ tương tự như một con trỏ trỏ đến một vị trí nào đó và chúng ta có thể truy cập nội dung tại vị trí cụ thể đó bằng cách sử dụng chúng
+* Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
+* Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
+* Nó giống như con trỏ, cho phép di chuyển qua các phần tử trong container.
+
+
