@@ -1787,7 +1787,7 @@ int main() {
     return 0;
 }
 ```
-## Standard Template Library (STL)
+# Standard Template Library (STL)
 **Khái niệm:** Standard Template Library ( STL) là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các template classes và functions để thực hiện nhiều loại cấu trúc dữ liệu và các thuật toán phổ biến. STL đã trở thành một phần quan trọng của ngôn ngữ C++ và làm cho việc lập trình trở nên mạnh mẽ, linh hoạt và hiệu quả.
 
 **Một số thành phần chính của STL:**
@@ -1796,7 +1796,7 @@ int main() {
 * Algorithms
 * Functor
 
-### Container
+## Container
 **Khái niệm:** Một container là một cấu trúc dữ liệu chứa nhiều phần tử theo một cách cụ thể. STL (Standard Template Library) cung cấp một số container tiêu biểu giúp lưu trữ và quản lý dữ liệu.
 
 **Một số container tiêu biểu là:**
@@ -2120,10 +2120,235 @@ int main()
 }
 ```
 
-### Iterator
+## Iterator
 * Iterator là một đối tượng (giống như một con trỏ) trỏ đến một phần tử bên trong container. Chúng ta có thể sử dụng iterator để di chuyển qua nội dung của container. Chúng có thể được hình dung như một thứ tương tự như một con trỏ trỏ đến một vị trí nào đó và chúng ta có thể truy cập nội dung tại vị trí cụ thể đó bằng cách sử dụng chúng
 * Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
 * Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
 * Nó giống như con trỏ, cho phép di chuyển qua các phần tử trong container.
 
+# Design pattern
+## Singleton pattern
+Singleton pattern là một mẫu thiết kế đảm bảo rằng chỉ có **một instance duy nhất** được tạo ra trong suốt vòng đời của chương trình, nó cung cấp các method để truy cập đến đối tượng từ bất kì đâu trong chương trình
 
+**Khi nào sử dụng:**
+* Khi cần quản lý các tài nguyên dùng chung (database, logger)
+* Khi cần một trạng thái hoặc cấu hình toàn cục (ví dụ như cấu hình các protocol UART, SPI, I2C,...)
+
+**Các đặc điểm chính của Singleton:**
+* Private Constructor: Đảm bảo không thể khởi tạo đối tượng từ bên ngoài lớp.
+* Static Instance: Đối tượng tĩnh duy nhất của lớp đó. Không thể tạo ra nhiều hơn một đối tượng của lớp Singleton.
+* Static method: Phương thức truy cập đến đối tượng Singleton duy nhất từ mọi nơi trong chương trình.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+
+using namespace std;
+
+void gpioInit(){
+    cout << "GPIO init...." << endl;
+}
+
+void gpioSetPin(int pin, bool value){
+    cout << "pin " << pin << " " << (value ? "HIGH" : "LOW") << endl;
+}
+
+void gpioRead(int pin){
+    cout << "Read pin " << pin << endl;
+}
+
+class GPIOManager{
+    private:
+    GPIOManager(){};
+
+    static GPIOManager* instance;
+
+    void init(){
+        gpioInit();
+    }
+
+    public:
+    static GPIOManager* getInstance(){
+        if(!instance){
+            instance = new GPIOManager();
+
+            instance->init();
+        }
+
+        return instance;
+    }
+
+    void setPin(int pin, bool value){
+        gpioSetPin(pin, value);
+    }
+
+    void readPin(int pin){
+        gpioRead(pin);
+    }
+};
+
+GPIOManager* GPIOManager::instance = nullptr;  // Khởi tạo instance là nullptr
+
+int main(){
+    GPIOManager* gpioManager = GPIOManager::getInstance();
+
+    gpioManager->setPin(5,true);
+
+    gpioManager->readPin(5);
+}
+```
+
+## Observer pattern
+* Là một behavioral pattern được sử dụng để thiết lập mối quan hệ phụ thuộc one to many giữa các đối tượng. Khi một đối tượng thay đổi trạng thái, tất cả các đối tượng phụ thuộc vào nó sẽ được tự động thông báo và cập nhật.
+* Subject: đối tượng chịu trách nhiệm quản lý và thông báo các thay đổi.
+* Observer: đối tượng sẽ đăng ký theo dõi Subject.
+
+**Khi nào sử dụng Observer pattern?**
+* Khi một đối tượng cần thông báo sự thay đổi của nó cho các đối tượng khác một cách tự động.
+* Khi cần tách rời logic xử lý giữa Subject và Observers, giúp hệ thống dễ bảo trì và mở rộng.
+
+**Các thành phần chính**
+Subject:
+* Là một object duy trì danh sách các Observers và thông báo cho chúng khi có sự thay đổi.
+* Cung cấp các phương thức để thêm, xóa và thông báo đến các Observers.
+
+Observer:
+* Là interface hoặc lớp abstract mà các Observers cụ thể sẽ implement hoặc kế thừa.
+* Định nghĩa phương thức update() để được gọi khi Subject thông báo có sự thay đổi.
+
+ConcreteSubject:
+* Kế thừa từ Subject hoặc implement Subject interface.
+* Duy trì trạng thái cụ thể và thông báo cho các Observers khi trạng thái thay đổi.
+
+ConcreteObserver:
+* Kế thừa từ Observer hoặc implement Observer interface.
+* Đăng ký với ConcreteSubject và cài đặt phương thức update() để nhận và xử lý thông báo khi ConcreteSubject thay đổi.
+
+**Ví dụ:**
+``` C++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
+
+class Observer{
+    public:
+    virtual void update(int speed, float temperature) = 0;
+};
+
+class Engine{
+    private:
+    int speed;
+    float temperature;
+    vector<pair<int,float>> history;
+    vector<Observer*> observers;
+
+    public:
+    void addObserver(Observer* observer){
+        observers.push_back(observer);
+    }
+
+    void removeObserver(Observer* observer){
+        observers.erase(remove(observers.begin(),observers.end(),observer),observers.end());
+    }
+
+    void notifyObserver(){
+        for(auto observer : observers){
+            observer->update(speed, temperature);
+        }
+    }
+
+    void setEngineState(int spd, float temp){
+        speed = spd;
+        temperature = temp;
+        history.emplace_back(spd,temp);
+        notifyObserver();
+    }
+
+    pair<int, float> getState()
+    {
+        if (!history.empty())
+        {
+            return history.back(); 
+        }
+        return {0, 0.0f}; 
+    }
+};
+
+class CoolingSystem : public Observer{
+    public:
+    void update(int speed, float temperature){
+        cout << "CoolingSystem: "<< "Speed: " << speed << " , Temperature: " << temperature <<endl;
+        if(temperature > 90){
+            cout << "Bật quạt làm mát" << endl;
+        }
+    }
+};
+
+class WarningSystem : public Observer{
+    public:
+    void update(int speed, float temperature){
+        cout << "WarningSystem: " << "Speed: " << speed << " , Temperature: " << temperature <<endl;        
+        
+        if(temperature > 100 || speed > 6000){
+            cout << "Cảnh báo nhiệt độ, tốc độ" << endl;
+        }
+    }
+};
+
+class EngineControlUnit : public Observer
+{
+private:
+    pair<int, float> prevState = {0, 0.0}; // Trạng thái trước đó
+    vector<pair<int, float>> history_;      // Lịch sử tốc độ và nhiệt độ
+
+public:
+    // Hàm cập nhật khi có thay đổi
+    void update(int tocdo, float temp) override
+    {
+        pair<int, float> currentState = {tocdo, temp};
+
+        // Kiểm tra thay đổi
+        if (currentState != prevState)
+        {
+            cout << "Trạng thái động cơ đã thay đổi!\n";
+            cout << "Tốc độ: " << tocdo << " vòng/phút, "
+                 << "Nhiệt độ: " << temp << " °C\n";
+
+            // Điều chỉnh hiệu suất và nhiên liệu
+            cout << "Điều chỉnh tham số hiệu suất và nhiên liệu..." << endl;
+
+            // Lưu trạng thái mới vào lịch sử
+            history_.emplace_back(tocdo, temp);
+        }
+        else
+        {
+            cout << "Không có thay đổi trong trạng thái động cơ." << endl;
+        }
+
+        // Cập nhật trạng thái trước đó
+        prevState = currentState;
+    }
+};
+
+int main(){
+    Engine ee1;
+
+    CoolingSystem cS1;
+    WarningSystem wS1;
+    EngineControlUnit ecu1;
+
+    ee1.addObserver(&cS1);
+    ee1.addObserver(&wS1);
+    ee1.addObserver(&ecu1);
+
+    ee1.setEngineState(5000,30);
+    ee1.setEngineState(2000,100);
+    ee1.setEngineState(2000,100);
+
+}
+```
+
+## Decorator pattern
