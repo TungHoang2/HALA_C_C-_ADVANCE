@@ -1566,6 +1566,29 @@ int main() {
 * Method ảo (virtual) --> ghi đè --> tính đa hình (run-time)
 
 
+# Virtual Function
+**Khái niệm:** 
+* Hàm ảo là một hàm thành viên được khai báo trong class cha với từ khóa virtual.
+* Khi một hàm là virtual, nó có thể được ghi đè (override) trong class con để cung cấp cách triển khai riêng.
+* Khi gọi một hàm ảo thông qua một con trỏ hoặc tham chiếu đến lớp con, hàm sẽ được quyết định dựa trên đối tượng thực tế mà con trỏ hoặc tham chiếu đang trỏ tới chứ không dựa vào kiểu của con trỏ.
+
+## Pure Virtual Function
+Hàm ảo thuần túy là một hàm ảo không có phần định nghĩa trong class cha, được khai báo với cú pháp = 0 và khiến class cha trở thành class trừu tượng, nghĩa là không thể tạo đối tượng từ class này.
+
+## Kế thừa ảo 
+* Kế thừa ảo giúp tránh vấn đề diamond problem trong đa kế thừa.
+* Chỉ có một bản sao duy nhất của lớp cơ sở chung được kế thừa.
+* Kế thừa ảo giúp quản lý các lớp liên quan đến phần cứng và giao tiếp. Điều này giúp tránh trùng lặp tài nguyên và quản lý hiệu quả trong hệ thống nhúng.
+
+**Diamond problem:**
+Class A là cơ sở.
+Class B và C kế thừa từ A.
+Class D kế thừa từ cả B và C.
+
+Khi đó, class D sẽ kế thừa hai bản sao riêng biệt của class A thông qua B và C, gây:
+* Trùng lặp dữ liệu: Class D chứa hai bản sao dữ liệu của class A.
+* Mơ hồ: Khi gọi thành viên của A từ D, trình biên dịch không biết sử dụng bản sao nào.
+
 # Template
 ## Function Template
 **Khái niệm:** Cho phép định nghĩa một hàm tổng quát, có thể hoạt động với nhiều kiểu dữ liệu khác nhau.
