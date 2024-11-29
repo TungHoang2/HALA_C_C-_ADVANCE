@@ -2396,3 +2396,224 @@ int main(){
 ```
 
 ## Decorator pattern
+
+**Khái niệm:** Decorator Pattern là một mẫu thiết kế cấu trúc (structural design pattern). Cho phép bạn thêm chức năng mới vào một đối tượng hiện tại mà không cần thay đổi cấu trúc của lớp gốc. Điều này được thực hiện bằng cách sử dụng các lớp con "bao bọc" (wrap) các đối tượng để thêm các hành vi mới.
+
+**Ứng dụng của Decorator Pattern:**
+* Mở rộng chức năng của một đối tượng mà không phải kế thừa trực tiếp từ lớp đó.
+* Giúp tăng tính linh hoạt và khả năng tái sử dụng của mã nguồn bằng cách tạo ra các lớp decorator có thể kết hợp với nhau.
+* Thay vì kế thừa từ lớp gốc để thêm chức năng, bạn có thể thêm chức năng bằng cách kết hợp các decorator khác nhau.
+
+**Cách hoạt động của Decorator Pattern:**
+* Component Interface (hoặc Abstract Class): Định nghĩa giao diện hoặc lớp cơ sở mà cả các lớp cụ thể và decorator sẽ kế thừa.
+* Concrete Component: Lớp cụ thể cần được mở rộng chức năng.
+* Decorator Base Class: Một lớp abstract (hoặc lớp cơ sở) kế thừa từ Component và giữ một con trỏ tới một đối tượng Component để "bao bọc" nó.
+* Concrete Decorators: Các lớp decorator cụ thể kế thừa từ lớp decorator base và thêm chức năng mới.
+
+``` C++
+#include <iostream>
+
+using namespace std;
+
+class Sensor{
+    public:
+        virtual void readData() = 0;
+};
+
+// Cảm biến nhiệt độ
+class TemperatureSensor : public Sensor{
+    public:
+        void readData() override {
+            cout<<"reading temperature data: "<<endl;
+        }
+};
+
+// Cảm biến độ ẩm
+class HumiditySensor : public Sensor{
+    public:
+        void readData() override {
+            cout<<"reading humidity data: "<<endl;
+        }
+};
+
+// Decorator Pattern
+class SensorDecorator : public Sensor{
+    protected:
+        Sensor* wrappedSensor;
+
+    public:
+        SensorDecorator(Sensor* sensor) : wrappedSensor(sensor){}
+
+        virtual void readData() override {
+            wrappedSensor->readData();
+        }
+};
+
+// Thêm tính năng Log
+class LoggingSensor : public SensorDecorator{
+    public:
+        LoggingSensor(Sensor* sensor) : SensorDecorator(sensor){}
+
+        void readData() override{
+            cout<<"LOG: sensor data"<<endl;
+            SensorDecorator::readData();
+        }
+};
+
+int main(int argc, char const *argv[])
+{
+    Sensor* tempSensor = new TemperatureSensor();
+    Sensor* log = new LoggingSensor(tempSensor);
+    log->readData();
+    return 0;
+}
+```
+
+## MVP pattern
+**Khái niệm:**
+MVP (Model-View-Presenter) Pattern là một mẫu thiết kế phần mềm giúp tách biệt logic xử lý dữ liệu, giao diện người dùng và logic điều khiển ứng dụng. Đây là một mẫu thiết kế phổ biến trong các ứng dụng GUI (Giao diện người dùng đồ họa) để làm cho mã nguồn dễ bảo trì và dễ kiểm thử hơn.
+
+**Cấu trúc MVP:**
+* Model: Đại diện cho dữ liệu và logic nghiệp vụ của ứng dụng. Model không phụ thuộc vào View và Presenter.
+* View: Đại diện cho giao diện người dùng. View chỉ hiển thị dữ liệu và gửi các sự kiện từ người dùng đến Presenter. View không chứa logic xử lý.
+* Presenter: Xử lý logic điều khiển ứng dụng. Nó nhận dữ liệu từ Model và quyết định cách hiển thị nó trên View. Presenter tương tác với Model để lấy dữ liệu và cập nhật View.
+
+**Cách MVP hoạt động:**
+* View gửi các hành động của người dùng (ví dụ: nhấn nút) đến Presenter.
+* Presenter nhận các hành động từ View, thực hiện các thao tác cần thiết trên Model, và cập nhật lại View với kết quả.
+* Model chứa dữ liệu và logic nghiệp vụ, và có thể được sử dụng trực tiếp bởi Presenter để lấy hoặc cập nhật dữ liệu.
+
+**Ưu điểm của MVP Pattern:**
+* Tách biệt logic và giao diện: Presenter chứa logic của ứng dụng, giúp View chỉ tập trung vào hiển thị.
+* Presenter không biết đến giao diện cụ thể: Presenter chỉ tương tác với View thông qua một interface, giúp việc kiểm thử và thay đổi giao diện trở nên dễ dàng.
+* Thích hợp cho ứng dụng có giao diện phức tạp: MVP rất hữu ích khi giao diện cần tương tác với nhiều dữ liệu và các thành phần phức tạp.
+
+``` C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class SinhVienModel{
+    private:
+        string name;
+        int age;
+        string studentId;
+
+    public:
+        SinhVienModel(const string& name, int age, const string& studentId): name(name), age(age), studentId(studentId){}
+
+        // setter method
+        void setName(const string& newName){
+            name = newName;
+        }
+
+        void setAge(int newAge){
+            age = newAge;
+        }
+
+        void setStudentId(const string& newStudentId){
+            studentId = newStudentId;
+        }
+
+        // getter method
+        string getName() const{
+            return name;
+        }
+
+        int getAge() const{
+            return age;
+        }
+
+        string getStudentId() const{
+            return studentId;
+        }
+};
+
+class SinhVienView{
+    public:
+        void displayStudentInfo(const string& name, int age, const string& studentId){
+            cout << "Thông tin sinh viên:" << endl;
+            cout << "Tên: " << name << endl;
+            cout << "Tuổi: " << age << endl;
+            cout << "Mã số sinh viên: " << studentId << endl;
+        }
+
+        void inputStudentInfo(string& name, int& age, string& studentId){
+            cout << "Nhập thông tin sinh viên:" << endl;
+
+            cout << "Tên: ";
+            getline(cin, name);
+
+            cout << "Tuổi: ";
+            cin >> age;
+            cin.ignore();  // Bỏ qua ký tự newline trong buffer
+
+            cout << "Mã số sinh viên: ";
+            getline(cin, studentId);
+        }
+};
+
+class SinhVienPresenter{
+    private:
+        SinhVienModel& model;
+        SinhVienView&  view;
+
+    public:
+        SinhVienPresenter(SinhVienModel& m, SinhVienView& v): model(m), view(v){}
+
+        void updateStudentInfo(){
+            string name;
+            int age;
+            string studentId;
+           
+            view.inputStudentInfo(name, age, studentId);
+            model.setName(name);
+            model.setAge(age);
+            model.setStudentId(studentId);
+        }
+
+        void showStudentInfo(){
+            view.displayStudentInfo(model.getName(), model.getAge(), model.getStudentId());
+        }
+};
+
+int main()
+{
+    // Tạo model, view và presenter
+    SinhVienModel model("Tuấn", 20, "HTN123");
+    SinhVienView view;
+    SinhVienPresenter presenter(model, view);
+
+    int choice;
+    do{
+        cout << "\n1. Hiển thị thông tin sinh viên" << std::endl;
+        cout << "2. Cập nhật thông tin sinh viên" << std::endl;
+        cout << "3. Thoát" << std::endl;
+        cout << "Nhập lựa chọn: ";
+        cin >> choice;
+        cin.ignore(); // Bỏ qua ký tự newline trong buffer
+       
+        switch (choice){
+            case 1:
+                presenter.showStudentInfo();
+                break;
+               
+            case 2:
+                presenter.updateStudentInfo();
+                break;
+
+            case 3:
+                cout << "Thoát chương trình." << endl;
+                break;
+
+            default:
+                cout << "Lựa chọn không hợp lệ!" << endl;
+        }
+       
+    } while (choice != 3);
+
+    return 0;
+}
+
+```
