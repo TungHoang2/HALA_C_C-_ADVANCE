@@ -1171,6 +1171,27 @@ trong đó ptr được phân bổ lại với kích thước mới 'newSize'.
 * Constructor là một method sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class.
 * Destructor là một method sẽ được tự động gọi khi object được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
 
+
+**Biến static trong class:** Khi một biến trong class được khai báo với từ khóa static, thì tất cả các object sẽ dùng chung địa chỉ của biến này.
+
+**Khi 1 method trong class được khai báo từ khóa static:**
+* Method này độc lập với bất kỳ đối tượng nào của lớp.
+* Method này có thể được gọi ngay cả khi không có đối tượng nào của class tồn tại.
+* Method này có thể được truy cập bằng cách sử dụng tên class thông qua toán tử :: .
+* Method này có thể truy cập các static property và các static method bên trong hoặc bên ngoài class.
+
+**Công dụng của static method:**
+1. Xử lý tiện ích chung (Utility Functions):
+* Cung cấp các hàm tiện ích như tính toán, chuyển đổi, kiểm tra logic mà không cần đối tượng.
+2. Quản lý biến static:
+* Truy cập và thao tác với các biến static dùng chung giữa các đối tượng, như đếm số lượng đối tượng được tạo.
+3. Tạo hàm Factory (Factory Methods):
+* Dùng để khởi tạo và trả về đối tượng của class mà không cần gọi trực tiếp constructor.
+4. Không phụ thuộc đối tượng:
+* Gọi trực tiếp thông qua class mà không cần tạo đối tượng, giúp tiết kiệm tài nguyên.
+5. Quản lý trạng thái toàn cục:
+* Quản lý các cài đặt hoặc tài nguyên chung như cấu hình ứng dụng hoặc phiên bản phần mềm.
+
 **Ví dụ:**
 
 ``` C++
